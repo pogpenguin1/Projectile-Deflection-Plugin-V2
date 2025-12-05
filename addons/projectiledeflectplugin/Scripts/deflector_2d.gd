@@ -202,7 +202,23 @@ func _on_area_entered(area: Area2D) -> void:
 		
 # Ability to delay when the deflect happens (useful for animation syncing, slow-mo)
 	if deflect_delay > 0.0:
+# Freeze projectile and turn off collisions so it doesnt run into player or walls during delay.
+
+		projectile.velocity = Vector2.ZERO
+		if projectile.has_method("set_collision_enabled"):
+			projectile.set_collision_enabled(false)
+			
 		await get_tree().create_timer(deflect_delay).timeout
+		
+# Projectile might have been destroyed during wait for other reasons.
+		if not is_instance_valid(projectile):
+			window_active = false
+			emit_signal("deflect_window_ended")
+			return
+		
+# Turn collisions back on before firing it back.
+		if projectile.has_method("set_collision_enabled"):
+			projectile.set_collision_enabled(true)
 		
 # Perform the deflect
 	projectile.deflect(deflect_direction, owner_for_projectile, speed_override)

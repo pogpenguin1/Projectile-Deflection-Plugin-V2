@@ -231,6 +231,16 @@ func find_nearest_homing_target() -> Node2D:
 
 
 
+func set_collision_enabled(enabled: bool) -> void:
+# Toggle Area2D monitoring so it stops sending/receiving area/body signals, allowing deflect delay to work properly.
+	set_deferred("monitoring", enabled)
+	set_deferred("monitorable", enabled)
+
+# Disable collisionshape2D so it cant be hit or hit.
+	for child in get_children():
+		if child is CollisionShape2D:
+			(child as CollisionShape2D).set_deferred("disabled", not enabled)
+
 # Called bt Deflector2D when deflection occurs
 func deflect(new_direction: Vector2, deflected_by: Node, speed_override: float = -1.0) -> void:
 	if not can_be_deflected:

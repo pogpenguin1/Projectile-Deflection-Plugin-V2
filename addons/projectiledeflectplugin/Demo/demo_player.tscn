@@ -34,6 +34,7 @@ hframes = 2
 position = Vector2(-0.229233, 0.286543)
 script = ExtResource("2_dwooc")
 deflect_window = 0.2
+deflect_delay = 0.3
 new_team_id = 0
 metadata/_custom_type_script = "uid://bf5k2ocvs1emr"
 
